@@ -1,6 +1,7 @@
 import threading
 import time
 from datetime import datetime
+import pyodbc
 
 minTemp = 1000
 maxTemp = 0
@@ -44,3 +45,18 @@ while (True):
 
 
     time.sleep(15)
+
+server = 'enrollmentsdbserver1.database.windows.net,1433'
+database = 'EnrollmentsDB'
+username = 'EnrollmentsSA'
+password = 'Chance123'
+driver= '{ODBC Driver 17 for SQL Server}'
+
+odbc = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+password+''
+with pyodbc.connect(odbc) as conn:
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT * FROM Student")
+        row = cursor.fetchone()
+        while row:
+            print (str(row[0]) + " " + str(row[1]))
+            row = cursor.fetchone()
